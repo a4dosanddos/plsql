@@ -1,0 +1,16 @@
+-- sample2 テーブルに対してデータを insert する
+-- 一意制約となった場合、対象データの update を行う
+
+CREATE OR REPLACE PROCEDURE InsertUpdate
+AS
+BEGIN
+  INSERT INTO sample2 VALUES (4, 'kit');
+  EXCEPTION WHEN others THEN
+    IF (SQLCODE = -1) THEN
+      UPDATE sample2 SET name = 'a4dos' WHERE id = 4;
+    ELSE
+      DBMS_OUTPUT.PUT_LINE('others');
+      ROLLBACK;
+    END IF;
+  COMMIT;
+END;
